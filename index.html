@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C Programming Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=mw3cnd20">
+</head>
+<body>
+<div id="demoBanner" class="demo-banner hidden">DEMO MODE — no Google Sheet connected; data stays in this browser. Logins: 1 / 1 … 5 / 5 (roll number = user ID = first password)</div>
+
+<!-- LOGIN -->
+<section id="view-login" class="view">
+  <div class="login-wrap">
+    <div class="login-brand">
+      <div class="logo">{ C }</div>
+      <h1 id="portalTitle">C Programming Portal</h1>
+      <p id="collegeName" class="muted"></p>
+    </div>
+    <form id="loginForm" class="card login-card" autocomplete="off">
+      <h2>Student login</h2>
+      <label>User ID (your roll number)<input id="loginId" required autocomplete="off" spellcheck="false"></label>
+      <label>Password<input id="loginPw" type="password" required autocomplete="off"></label>
+      <button class="btn primary" type="submit" id="loginBtn">Log in</button>
+      <p class="muted small" style="margin:0">First time? Your password is also your roll number — you will be asked to change it.</p>
+      <p id="loginMsg" class="msg"></p>
+    </form>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="view-dash" class="view hidden">
+  <header class="topbar">
+    <div class="brand">{ C } <span id="tbTitle"></span></div>
+    <div class="who"><span id="whoName"></span><button class="btn ghost small" id="pwBtn">Change password</button><button class="btn ghost small" id="logoutBtn">Log out</button></div>
+  </header>
+  <main class="page">
+    <div class="crumbs" id="crumbs"></div>
+    <div id="dashHome">
+      <h2 class="page-title" style="margin-bottom:4px">Welcome, <span id="welcomeName"></span></h2>
+      <div class="id-card"><span>Roll No: <b id="welcomeRoll"></b></span><span>Name: <b id="welcomeName2"></b></span><span>Case Study: <b id="welcomeCase"></b></span></div>
+      <div class="panels">
+        <button class="panel-card" id="openAssignPanel">
+          <div class="panel-icon">A</div><h3>Assignment panel</h3><p>Your case study assignment, auto-evaluated</p>
+        </button>
+        <button class="panel-card" id="openLabPanel">
+          <div class="panel-icon lab">L</div><h3>Lab panel</h3><p>Weekly lab programs</p>
+        </button>
+      </div>
+      <div class="compiler-status" id="compilerStatus">Preparing the C compiler on this computer…</div>
+    </div>
+
+    <div id="labHome" class="hidden">
+      <h2 class="page-title">Lab panel</h2>
+      <div id="weekList" class="week-list"></div>
+      <div id="weekPrograms" class="hidden"></div>
+    </div>
+
+    <div id="assignHome" class="hidden">
+      <h2 class="page-title">Assignment panel</h2>
+      <div class="card assign-card">
+        <div class="assign-head">
+          <div><div class="eyebrow" id="assignEyebrow"></div><h3 id="assignTitle"></h3></div>
+          <span class="status-pill" id="assignStatus"></span>
+        </div>
+        <p id="assignScenario" class="scenario"></p>
+        <ol id="assignQs" class="assign-qs"></ol>
+        <div id="assignEval" class="assign-eval"></div>
+        <div class="assign-foot">
+          <div class="muted small" id="assignMeta"></div>
+          <button class="btn primary" id="startBtn">Open assignment</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- EXAM -->
+<section id="view-exam" class="view hidden">
+  <header class="exam-bar">
+    <div class="eb-left"><strong id="exTitle"></strong><span class="muted small" id="exWho"></span></div>
+    <div class="eb-right">
+      <span id="saveState" class="save-state">Not saved yet</span>
+      <span id="violBadge" class="viol">Warnings 0/3</span>
+      <button class="btn ghost small" id="closeExamBtn">Save &amp; close</button>
+      <button class="btn danger small" id="finalBtn">Final submit</button>
+    </div>
+  </header>
+  <div class="exam-body">
+    <nav class="qnav" id="qnav"></nav>
+    <div class="qpane">
+      <div class="qtext noselect" id="qtext"></div>
+      <div class="editor-wrap">
+        <div class="editor-head"><span id="edLabel"></span><span class="muted small">Typing only — copy, paste and drag-drop are disabled · compiles on this computer</span></div>
+        <div id="editor"></div>
+      </div>
+      <div class="runbar">
+        <button class="btn" id="runProgBtn">▶ Run program</button>
+        <textarea id="stdin" class="stdin" rows="1" spellcheck="false" autocomplete="off" placeholder="Input for Run program — type what you would enter at the keyboard, e.g.  1  1 1 2024 1 3 2024  0"></textarea>
+        <button class="btn primary" id="runBtn">Run tests for Q1</button>
+      </div>
+      <div class="console noselect" id="console"></div>
+    </div>
+  </div>
+</section>
+
+<!-- shield shown whenever the window loses focus / a screenshot key is pressed -->
+<div id="shield" class="shield hidden"><div class="shield-box"><h2 id="shieldTitle">Assignment hidden</h2><p id="shieldMsg"></p><button class="btn primary" id="shieldBtn">Return to full screen</button></div></div>
+<div id="modal" class="modal hidden"><div class="modal-box"><h3 id="mTitle"></h3><div id="mBody"></div><div class="modal-actions" id="mActions"></div></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="js/config.js?v=mw3cnd20"></script>
+<script src="js/cases-text.js?v=mw3cnd20"></script>
+<script src="js/tests-data.js?v=mw3cnd20"></script>
+<script src="js/api.js?v=mw3cnd20"></script>
+<script src="js/compiler.js?v=mw3cnd20"></script>
+<script src="js/grader.js?v=mw3cnd20"></script>
+<script src="js/editor.js?v=mw3cnd20"></script>
+<script src="js/app.js?v=mw3cnd20"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher Report</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=mw3cnd20">
+<link rel="stylesheet" href="css/teacher.css?v=mw3cnd20">
+</head>
+<body>
+<div id="demoBanner" class="demo-banner hidden">DEMO MODE — teacher key: teacher123</div>
+<header class="topbar"><div class="brand">{ C } <span>Teacher report</span></div><div class="who"><span id="tWho"></span></div></header>
+
+<main class="page wide">
+  <form id="keyForm" class="card login-card" style="margin:40px auto">
+    <h2>Teacher access</h2>
+    <label>Teacher key<input id="tKey" type="password" required></label>
+    <button class="btn primary">Open report</button>
+    <p class="msg" id="keyMsg"></p>
+  </form>
+
+  <section id="report" class="hidden">
+    <div class="rep-head">
+      <div><h2 class="page-title" style="margin:0">Assignment report</h2><div class="muted small" id="repMeta"></div></div>
+      <div class="rep-actions">
+        <button class="btn" id="reloadBtn">Reload submissions</button>
+        <button class="btn primary" id="evalBtn">Evaluate all</button>
+        <button class="btn" id="saveBtn" disabled>Save results to Google Sheet</button>
+        <button class="btn" id="csvBtn" disabled>Download CSV</button>
+        <button class="btn primary" id="mailBtn" disabled>Email results</button>
+        <button class="btn" id="printBtn">Print</button>
+      </div>
+    </div>
+    <div class="legend small">
+      <span><b class="lv l3">3</b> logic fully reached (all tests pass, correct use of structures/pointers/loops)</span>
+      <span><b class="lv l2">2</b> moderate (some tests pass, or rules not followed)</span>
+      <span><b class="lv l1">1</b> poor (does not compile or no test passes)</span>
+      <span><b class="lv l0">–</b> not attempted</span>
+      <span>· <b>main()</b>: 3 = all outputs correct + code rules, 2 = at least half of the outputs, 1 = fewer / crash / no compile</span>
+    </div>
+    <div class="progress hidden" id="prog"><div class="bar" id="progBar"></div><span id="progText"></span></div>
+    <div class="table-wrap"><table class="rep" id="repTable"></table></div>
+  </section>
+</main>
+
+<div id="modal" class="modal hidden"><div class="modal-box wide"><h3 id="mTitle"></h3><div id="mBody"></div><div class="modal-actions" id="mActions"></div></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="js/config.js?v=mw3cnd20"></script>
+<script src="js/cases-text.js?v=mw3cnd20"></script>
+<script src="js/tests-data.js?v=mw3cnd20"></script>
+<script src="js/api.js?v=mw3cnd20"></script>
+<script src="js/compiler.js?v=mw3cnd20"></script>
+<script src="js/grader.js?v=mw3cnd20"></script>
+<script src="js/teacher.js?v=mw3cnd20"></script>
+</body>
+</html>
