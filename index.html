@@ -6,7 +6,7 @@
 <title>C Programming Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=mw3ezeb3">
+<link rel="stylesheet" href="css/style.css?v=mw3fjnkr">
 </head>
 <body>
 <div id="demoBanner" class="demo-banner hidden">DEMO MODE — no Google Sheet connected; data stays in this browser. Logins: 1 / 1 … 5 / 5 (roll number = user ID = first password)</div>
@@ -28,6 +28,7 @@
       <p id="loginMsg" class="msg"></p>
     </form>
   </div>
+  <footer class="credit">Portal developed by <b>A Sangeetha</b>, Asst. Prof., CSE Department, CBIT</footer>
 </section>
 
 <!-- DASHBOARD -->
@@ -75,6 +76,7 @@
       </div>
     </div>
   </main>
+  <footer class="credit">Portal developed by <b>A Sangeetha</b>, Asst. Prof., CSE Department, CBIT</footer>
 </section>
 
 <!-- EXAM -->
@@ -89,21 +91,26 @@
     </div>
   </header>
   <div class="exam-body">
-    <nav class="qnav" id="qnav"></nav>
-    <div class="qpane">
+    <aside class="leftcol">
+      <nav class="qnav" id="qnav"></nav>
       <div class="qtext noselect" id="qtext"></div>
+    </aside>
+    <div class="rightcol">
       <div class="editor-wrap">
         <div class="editor-head"><span id="edLabel"></span><span class="muted small">Typing only — copy, paste and drag-drop are disabled · compiles on this computer</span></div>
         <div id="editor"></div>
       </div>
-      <div class="runbar">
-        <button class="btn" id="runProgBtn">▶ Run program</button>
-        <textarea id="stdin" class="stdin" rows="1" spellcheck="false" autocomplete="off" placeholder="Optional: input to type automatically. Leave empty — Run program will ask for input like a normal terminal."></textarea>
-        <button class="btn primary" id="runBtn">Run tests for Q1</button>
+      <div class="testpane">
+        <div class="runbar">
+          <button class="btn" id="runProgBtn">▶ Run program</button>
+          <textarea id="stdin" class="stdin" rows="1" spellcheck="false" autocomplete="off" placeholder="Optional: input to type automatically. Leave empty — Run program asks for input like a normal terminal."></textarea>
+          <button class="btn primary" id="runBtn">Run tests for Q1</button>
+        </div>
+        <div class="console noselect" id="console"></div>
       </div>
-      <div class="console noselect" id="console"></div>
     </div>
   </div>
+  <footer class="credit exam-credit">Portal developed by <b>A Sangeetha</b>, Asst. Prof., CSE Department, CBIT</footer>
 </section>
 
 <!-- shield shown whenever the window loses focus / a screenshot key is pressed -->
@@ -111,13 +118,13 @@
 <div id="modal" class="modal hidden"><div class="modal-box"><h3 id="mTitle"></h3><div id="mBody"></div><div class="modal-actions" id="mActions"></div></div></div>
 <div id="toast" class="toast hidden"></div>
 
-<script src="js/config.js?v=mw3ezeb3"></script>
-<script src="js/cases-text.js?v=mw3ezeb3"></script>
-<script src="js/tests-data.js?v=mw3ezeb3"></script>
-<script src="js/api.js?v=mw3ezeb3"></script>
-<script src="js/compiler.js?v=mw3ezeb3"></script>
-<script src="js/grader.js?v=mw3ezeb3"></script>
-<script src="js/editor.js?v=mw3ezeb3"></script>
-<script src="js/app.js?v=mw3ezeb3"></script>
+<script src="js/config.js?v=mw3fjnkr"></script>
+<script src="js/cases-text.js?v=mw3fjnkr"></script>
+<script src="js/tests-data.js?v=mw3fjnkr"></script>
+<script src="js/api.js?v=mw3fjnkr"></script>
+<script src="js/compiler.js?v=mw3fjnkr"></script>
+<script src="js/grader.js?v=mw3fjnkr"></script>
+<script src="js/editor.js?v=mw3fjnkr"></script>
+<script src="js/app.js?v=mw3fjnkr"></script>
 </body>
 </html>

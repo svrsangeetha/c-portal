@@ -150,3 +150,25 @@ pre.sample{background:#f6f8fc;border:1px solid var(--line);padding:8px;border-ra
 .console pre.term{white-space:pre-wrap;min-height:60px}
 .console .tin{color:#ffd28a}
 .termin{background:transparent;border:0;border-bottom:1px solid #ffd28a;color:#ffd28a;font:inherit;outline:none;min-width:160px;padding:0 2px}
+
+/* ===== layout v2: left = questions, right = editor + tests ===== */
+#view-exam{height:100vh;display:flex;flex-direction:column}
+.exam-body{flex:1;display:grid;grid-template-columns:minmax(320px,34%) 1fr;gap:12px;padding:12px;min-height:0}
+.leftcol{display:flex;flex-direction:column;gap:12px;min-height:0}
+.leftcol .qnav{width:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;flex-direction:initial}
+.leftcol .qnav .qbtn{padding:8px 4px}
+.leftcol .qnav .qnav-foot{grid-column:1/-1;text-align:center;margin:0}
+.leftcol .qtext{flex:1;max-height:none;overflow:auto;min-height:0}
+.rightcol{display:grid;grid-template-rows:minmax(240px,1.35fr) minmax(200px,1fr);gap:12px;min-height:0;min-width:0}
+.rightcol .editor-wrap{min-height:0}
+.testpane{display:flex;flex-direction:column;gap:8px;min-height:0}
+.testpane .console{flex:1;min-height:0}
+.credit{text-align:center;font-size:12.5px;color:var(--muted);padding:10px 16px}
+.credit b{color:var(--brand)}
+.exam-credit{padding:4px 16px 6px;background:#fff;border-top:1px solid var(--line)}
+#view-login,#view-dash{min-height:100vh;display:flex;flex-direction:column}
+#view-dash main{flex:1;width:100%}
+#view-login .login-wrap{flex:1}
+@media (max-width:900px){ .exam-body{grid-template-columns:1fr} .rightcol{grid-template-rows:420px 300px} }
+#view-login .login-wrap{min-height:0;padding:32px 24px}
+#view-login .login-wrap{gap:14px;padding:20px 24px;align-content:center} #view-login .login-brand h1{margin:8px 0 0}
