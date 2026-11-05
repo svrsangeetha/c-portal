@@ -19,6 +19,27 @@ self.onmessage = async (e) => {
     catch (err) { self.postMessage({ type: 'init-error', message: String((err && err.message) || err) }); }
     return;
   }
+  /* Interactive run: the program is re-run from the start with all lines typed so far (it is
+     deterministic and the compiled program is cached, so this takes milliseconds). When it asks for
+     more input than has been typed, it is stopped and the page shows an input line at that point. */
+  if (m.type === 'interactive') {
+    let result;
+    const log = [];
+    let idx = 0, need = false;
+    const code = m.code + '\n#include <stdio.h>\n__attribute__((constructor)) static void __portal_unbuffered(void) { setvbuf(stdout, NULL, _IONBF, 0); }\n';
+    try {
+      const c = await ensure();
+      const r = await c.run(code, '', {
+        stdin: () => { if (idx < m.inputs.length) { const line = m.inputs[idx++]; log.push({ in: line }); return line; } need = true; throw new Error('PORTAL_NEED_INPUT'); },
+        onOutput: (chunk) => { if (chunk) log.push({ out: chunk }); }
+      });
+      result = { status: 'done', log, errors: r.errors, exitCode: r.exitCode };
+    } catch (err) {
+      result = need ? { status: 'need', log, errors: [] } : { status: 'error', log, errors: [], runtimeError: String((err && err.message) || err) };
+    }
+    self.postMessage({ type: 'result', id: m.id, result });
+    return;
+  }
   if (m.type === 'run') {
     let result;
     try {

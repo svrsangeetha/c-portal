@@ -146,3 +146,7 @@ pre.sample{background:#f6f8fc;border:1px solid var(--line);padding:8px;border-ra
 #view-exam{user-select:none;-webkit-user-select:none}
 #view-exam textarea{user-select:text;-webkit-user-select:text}
 .casebox{margin-bottom:6px;color:#334155}.casebox summary{cursor:pointer;color:var(--brand)}
+
+.console pre.term{white-space:pre-wrap;min-height:60px}
+.console .tin{color:#ffd28a}
+.termin{background:transparent;border:0;border-bottom:1px solid #ffd28a;color:#ffd28a;font:inherit;outline:none;min-width:160px;padding:0 2px}

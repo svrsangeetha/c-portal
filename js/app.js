@@ -231,22 +231,48 @@
   }
 
   /* ------------------------------------------------ run the student's own program */
+  /* Interactive console, like a lab terminal: the program prints its prompts and an input line appears
+     wherever scanf() waits. (Behind the scenes the program is re-run with the lines typed so far.)
+     Anything typed in the Input box beforehand is fed in first. */
+  let term = null;
   $('runProgBtn').onclick = async () => {
-    $('runProgBtn').disabled = true;
+    const pre = $('stdin').value.replace(/\r/g, '');
+    const lines = pre.trim() ? pre.split('\n').map(l => l + '\n') : [];
+    term = { code: state.codes[0], inputs: lines, busy: false };
     $('console').innerHTML = '<div class="muted">Compiling and running your program on this computer…</div>';
-    try {
-      const r = await Grader.runProgram(compiler, state.codes[0], $('stdin').value);
-      let h = '';
-      const errs = (r.errors || []).filter(l => !/^Error: process exited/.test(l));
-      if (errs.length) h = `<div class="bad"><b>Compilation errors</b></div><pre class="err">${esc(errs.join('\n'))}</pre>`;
-      else {
-        h = `<div class="muted">Program output${r.timeout ? ' (stopped after the time limit — infinite loop or waiting for more input?)' : ''}:</div><pre class="out">${esc(r.stdout || '') || '(no output)'}</pre>`;
-        if (r.runtimeError) h += `<div class="bad">Runtime error: ${esc(r.runtimeError)}</div>`;
-      }
-      $('console').innerHTML = h;
-    } catch (e) { $('console').innerHTML = `<div class="bad">Could not run: ${esc(e.message)}</div>`; }
-    $('runProgBtn').disabled = false;
+    await termStep();
   };
+  async function termStep() {
+    if (!term || term.busy) return;
+    term.busy = true; $('runProgBtn').disabled = true;
+    let r;
+    try { r = await compiler.runInteractive(term.code, term.inputs); }
+    catch (e) { r = { status: 'error', log: [], errors: [], runtimeError: e.message }; }
+    term.busy = false; $('runProgBtn').disabled = false;
+    renderTerm(r);
+  }
+  function renderTerm(r) {
+    const el = $('console');
+    const errs = (r.errors || []).filter(l => !/^Error: process exited/.test(l));
+    if (errs.length) { el.innerHTML = `<div class="bad"><b>Compilation errors</b></div><pre class="err">${esc(errs.join('\n'))}</pre>`; term = null; return; }
+    let body = '';
+    (r.log || []).forEach(x => { body += x.out !== undefined ? esc(x.out) : `<span class="tin">${esc(x.in)}</span>`; });
+    let tail = '';
+    if (r.status === 'need') tail = '<input class="termin" id="termIn" autocomplete="off" spellcheck="false">';
+    else if (r.status === 'timeout') tail = '\n<span class="bad">— stopped after the time limit (infinite loop?) —</span>';
+    else if (r.status === 'error') tail = `\n<span class="bad">— runtime error: ${esc(r.runtimeError || '')} —</span>`;
+    else tail = `\n<span class="muted">— program finished${r.exitCode ? ' (exit code ' + r.exitCode + ')' : ''} —</span>`;
+    el.innerHTML = `<div class="muted small">Program console${r.status === 'need' ? ' — type the input and press Enter' : ''}</div><pre class="out term">${body}${tail}</pre>`;
+    el.scrollTop = el.scrollHeight;
+    const inp = $('termIn');
+    if (inp) {
+      inp.focus();
+      inp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); term.inputs.push(inp.value + '\n'); inp.disabled = true; termStep(); }
+      });
+    }
+    if (r.status !== 'need') term = null;
+  }
 
   /* ------------------------------------------------ run tests */
   $('runBtn').onclick = async () => {
@@ -424,7 +450,7 @@
   }
   ['copy', 'cut', 'paste', 'contextmenu', 'dragstart', 'drop', 'selectstart'].forEach(ev => document.addEventListener(ev, (e) => {
     if (!examActive) return;
-    if (ev === 'selectstart' && e.target && e.target.closest && e.target.closest('textarea')) return;
+    if (ev === 'selectstart' && e.target && e.target.closest && e.target.closest('textarea, input')) return;
     e.preventDefault();
   }, true));
 

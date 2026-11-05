@@ -9,7 +9,7 @@
       this.onProgress = null; this.state = 'idle';
     }
     _spawn() {
-      this.worker = new Worker('js/worker.js?v=mw3e3mlg');
+      this.worker = new Worker('js/worker.js?v=mw3ezeb3');
       this.state = 'loading';
       this.readyPromise = new Promise((resolve, reject) => {
         this._readyResolve = resolve; this._readyReject = reject;
@@ -33,6 +33,24 @@
       try { this.worker.terminate(); } catch (e) {}
       for (const p of this.pending.values()) p.resolve({ timeout: true, errors: [], stdout: '', exitCode: null });
       this.pending.clear(); this.worker = null; this._spawn();
+    }
+    /* Interactive run with the lines typed so far (see worker.js). */
+    runInteractive(code, inputs, timeoutMs) { return this._job({ type: 'interactive', code, inputs: inputs || [] }, timeoutMs); }
+    _job(msg, timeoutMs) {
+      const job = async () => {
+        await this.init();
+        const id = ++this.seq;
+        return await new Promise((resolve) => {
+          const timer = setTimeout(() => {
+            if (this.pending.has(id)) { this.pending.delete(id); resolve({ timeout: true, status: 'timeout', log: [], errors: [] }); this._restart(); }
+          }, timeoutMs || (window.CONFIG && CONFIG.RUN_TIMEOUT_MS) || 10000);
+          this.pending.set(id, { resolve: (r) => { clearTimeout(timer); resolve(r); } });
+          this.worker.postMessage(Object.assign({ id }, msg));
+        });
+      };
+      const p = this.chain.then(job, job);
+      this.chain = p.catch(() => {});
+      return p;
     }
     /* Runs are serialised: one at a time per browser tab. */
     run(code, input, timeoutMs) {
