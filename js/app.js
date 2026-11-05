@@ -28,7 +28,7 @@
   const caseNo = () => session.student.caseNo;
   const caseText = () => window.CASES[caseNo() - 1];
   const spec = () => window.TESTS[caseNo()];
-  const localKey = () => `cportal_work_${session.student.userId}_${caseNo()}`;
+  const localKey = () => `cportal_work2_${session.student.userId}_${caseNo()}`;   /* v2: ignore backups made before the hint-only main() */
   function starterProgram() { return Grader.template(caseNo()); }
 
   /* ------------------------------------------------ login */

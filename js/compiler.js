@@ -9,7 +9,7 @@
       this.onProgress = null; this.state = 'idle';
     }
     _spawn() {
-      this.worker = new Worker('js/worker.js?v=mw3cnd20');
+      this.worker = new Worker('js/worker.js?v=mw3e3mlg');
       this.state = 'loading';
       this.readyPromise = new Promise((resolve, reject) => {
         this._readyResolve = resolve; this._readyReject = reject;
