@@ -103,7 +103,7 @@
     if (f && f.body.trim()) {
       if (q.needLoop !== false && !/\b(for|while)\b/.test(scope)) notes.push('No loop used');
       const requirePtr = !(window.CONFIG && CONFIG.REQUIRE_POINTER_ACCESS === false);
-      if (requirePtr && !/->|\*\s*\(/.test(scope)) notes.push('Structure members not accessed through pointers (use -> or pointer arithmetic, not only a[i].member)');
+      if (requirePtr && q.needPtr !== false && !/->|\*\s*\(/.test(scope)) notes.push('Structure members not accessed through pointers (use -> or pointer arithmetic, not only a[i].member)');
     }
     return { ok: notes.length === 0, notes };
   }
@@ -234,11 +234,15 @@
         if (ok) pos = j;
         out.checks.push({ opt: ck.opt, pass: ok, expected: ck.expected ? (ck.show || ck.expected.join(' ')) : undefined });
         if (ok) res.passed++;
+        if (!ck.weak) { res.strongTotal = (res.strongTotal || 0) + 1; if (ok) res.strongPassed = (res.strongPassed || 0) + 1; }
       }
       res.scenarios.push(out);
     }
     const codeIssues = res.code.notes.length;
-    if (!anyRan || res.passed * 2 < res.total) res.level = 1;          /* poor: fewer than half the outputs correct */
+    /* Level 2 needs at least half of the DISTINCTIVE outputs (checks containing an amount, an id or a
+       number of 10 or more), so that a program that only prints a menu cannot pass by chance. */
+    const sp = res.strongTotal ? (res.strongPassed || 0) : res.passed, st = res.strongTotal || res.total;
+    if (!anyRan || sp * 2 < st) res.level = 1;                          /* poor */
     else if (res.passed === res.total && codeIssues <= 1) res.level = 3; /* all outputs correct, code rules followed */
     else res.level = 2;
     return res;
