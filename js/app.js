@@ -127,7 +127,7 @@
     $('assignTitle').textContent = t.t;
     $('assignScenario').innerHTML = '🔒 <b>The case study, the five questions and the main() instructions are shown only after you start the assignment in full screen.</b> Copying, screenshots and switching windows are blocked or recorded there.';
     $('assignQs').innerHTML = '';
-    $('assignEval').innerHTML = generalRulesHtml();
+    $('assignEval').innerHTML = ''; $('assignEval').style.display = 'none';
     const st = s.locked ? 'LOCKED' : s.status;
     $('assignStatus').textContent = st; $('assignStatus').className = 'status-pill ' + st.toLowerCase().replace(/\W+/g, '-');
     $('assignMeta').textContent = `5 questions × 2 marks · ${spec() ? 'auto-evaluated with 3 test cases each' : 'test cases will be added soon'}${s.lastSaved ? ' · last saved ' + new Date(s.lastSaved).toLocaleString() : ''}`;
@@ -137,7 +137,7 @@
 
   /* ------------------------------------------------ start exam */
   $('startBtn').onclick = async () => {
-    const ok = await modal('Before you start', `${generalRulesHtml()}<ul class="rules">
+    const ok = await modal('Before you start', `<ul class="rules">
       <li>The assignment opens in <b>full screen</b>. Leaving full screen, switching windows/tabs or pressing screenshot keys is recorded.</li>
       <li>After <b>${LIMIT}</b> such warnings the assignment is <b>locked</b> and only your teacher can unlock it.</li>
       <li>Copy, paste and drag-drop are disabled — <b>type your code</b>.</li>
@@ -296,7 +296,7 @@
     let h = '';
     if (r.compileErrors) h += `<div class="bad"><b>Compilation errors</b></div><pre class="err">${esc(r.compileErrors)}</pre>`;
     h += '<div class="tests">' + r.tests.map((t, k) => `<div class="tcase ${t.pass ? 'pass' : 'fail'}"><div><b>${t.pass ? '✓' : '✗'} Test ${k + 1}</b> ${t.visible ? '(sample)' : '(hidden)'} — ${esc(t.name)}${t.reason && !t.pass ? ` <span class="muted">· ${esc(t.reason)}</span>` : ''}</div>${t.visible && !t.pass && t.got !== undefined ? `<div class="io"><div><span class="muted">Expected</span><pre>${esc(t.expected)}</pre></div><div><span class="muted">Your output</span><pre>${esc(t.got) || '(nothing)'}</pre></div></div>` : ''}</div>`).join('') + '</div>';
-    h += `<div class="summary">Passed ${r.passed}/${r.total}${r.static.notes.length ? ' · <span class="warn">' + esc(r.static.notes.join(' · ')) + '</span>' : ''}</div>`;
+    h += `<div class="summary">Passed ${r.passed}/${r.total}</div>`;
     el.innerHTML = h;
   }
 
@@ -307,8 +307,7 @@
       <table class="mtable"><tr><th>Option</th><th>Input after the option</th><th>What your program must do and print</th></tr>
       ${ms.menu.map(m => `<tr><td>${m.o}</td><td><code>${esc(m.in)}</code></td><td>${esc(m.out)}</td></tr>`).join('')}
       <tr><td>0</td><td>—</td><td>exit the menu loop and end the program</td></tr></table>
-      <p class="small"><b>Output check:</b> the correct numbers must appear in your output in the order of the options. Messages and wording are your choice; print amounts with 2 decimals (<code>%.2f</code>).
-      <b>Code check:</b> menu loop · switch with default · malloc/calloc · NULL check · scanf · members through <code>-&gt;</code> · all five functions called · free().</p>
+      <p class="small"><b>Output check:</b> the correct numbers must appear in your output in the order of the options. Messages and wording are your choice; print amounts with 2 decimals (<code>%.2f</code>).</p>
       <details class="small"><summary>Sample input used for check 1 (check 2 uses different, hidden data)</summary><pre class="sample">${esc(ms.scenarios[0].input)}</pre>${compact ? '<button class="btn small" id="useSample">Put this sample in the Input box</button>' : ''}</details>`;
     return h;
   }
@@ -339,7 +338,7 @@
       h += '</div>';
     });
     const miss = r.code.items.filter(x => !x.ok).map(x => x.label);
-    h += `<div class="summary">Outputs correct ${r.passed}/${r.total}${miss.length ? ' · <span class="warn">Code check missing: ' + esc(miss.join(' · ')) + '</span>' : ' · code checks ✓'}</div>`;
+    h += `<div class="summary">Outputs correct ${r.passed}/${r.total}</div>`; void miss;
     return h;
   }
 
