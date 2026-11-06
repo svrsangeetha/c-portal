@@ -142,7 +142,7 @@
       <li>After <b>${LIMIT}</b> such warnings the assignment is <b>locked</b> and only your teacher can unlock it.</li>
       <li>Copy, paste and drag-drop are disabled — <b>type your code</b>.</li>
       <li>Your work is saved automatically. Use <b>Save &amp; close</b> to stop; you can resume later. Closing the window also submits what you have.</li>
-      <li>You get one complete C program: the structures and a menu-driven <code>main()</code> are already written. Complete the <b>five functions</b>. You may change <code>main()</code> to try your functions. No file handling.</li></ul>`,
+      <li>You get one C program with the structures and the five function headings. Complete the <b>five functions</b> and write <code>main()</code> yourself, following the hint comments and the input order shown on the <b>main()</b> button. No file handling.</li></ul>`,
       [{ label: 'Cancel', value: false }, { label: 'I agree — start in full screen', cls: 'primary', value: true }]);
     if (!ok) return;
     try { await document.documentElement.requestFullscreen({ navigationUI: 'hide' }); } catch (e) { toast('Full screen is required. Please allow it.'); return; }
