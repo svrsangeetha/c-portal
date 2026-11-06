@@ -192,7 +192,7 @@
       return;
     }
     let html = `<details class="small casebox"${i === 0 ? ' open' : ''}><summary><b>Case study ${caseNo()}: ${esc(t.t)}</b></summary><p>${esc(t.s || '')}</p></details>
-      <div class="qhead"><span class="eyebrow">Question ${i + 1} · 2 marks</span></div><p class="qdoc">${esc(t.q[i])}</p>`;
+      <div class="qhead"><span class="eyebrow">Question ${i + 1} · 2 marks</span></div>${s ? '' : `<p class="qdoc">${esc(t.q[i])}</p>`}`;
     if (s) {
       const q = s.questions[i];
       html += `<div class="spec"><div class="spec-label">Complete this function in your program</div><code class="sig">${esc(q.sig)}</code><p>${esc(q.spec)}</p></div>`;
